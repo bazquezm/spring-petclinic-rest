@@ -192,7 +192,7 @@ class OwnerRestControllerV1Tests {
         given(this.clinicService.findOwnerByLastName("0")).willReturn(ownerMapper.toOwners(owners));
         this.mockMvc.perform(get("/api/owners?lastName=0")
                 .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isNotFound());
+            .andExpect(status().isOk()).andExpect(content().json("[]"));
     }
 
     @Test
