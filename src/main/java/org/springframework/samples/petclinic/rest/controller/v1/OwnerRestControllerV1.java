@@ -17,6 +17,7 @@
 package org.springframework.samples.petclinic.rest.controller.v1;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.http.HttpHeaders;
@@ -81,7 +82,7 @@ public class OwnerRestControllerV1 implements OwnersApi {
             owners = this.clinicService.findAllOwners();
         }
         if (owners.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(Collections.emptyList(),HttpStatus.OK);
         }
         return new ResponseEntity<>(ownerMapper.toOwnerDtoCollection(owners), HttpStatus.OK);
     }
@@ -121,7 +122,7 @@ public class OwnerRestControllerV1 implements OwnersApi {
         currentOwner.setLastName(ownerFieldsDto.getLastName());
         currentOwner.setTelephone(ownerFieldsDto.getTelephone());
         this.clinicService.saveOwner(currentOwner);
-        return new ResponseEntity<>(ownerMapper.toOwnerDto(currentOwner), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(ownerMapper.toOwnerDto(currentOwner), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole(@roles.OWNER_ADMIN)")
