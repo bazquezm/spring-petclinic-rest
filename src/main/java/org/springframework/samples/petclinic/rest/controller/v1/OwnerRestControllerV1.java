@@ -199,4 +199,19 @@ public class OwnerRestControllerV1 implements OwnersApi {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @Override
+    public ResponseEntity<List<PetDto>> getPetsByOwner(Integer ownerId){
+        Owner owner = this.clinicService.findOwnerById(ownerId);
+        List <PetDto> pets;
+        if ( owner != null ){
+            pets = owner.getPets().stream()
+                    .map(petMapper::toPetDto)
+                    .toList();
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(pets, HttpStatus.OK);
+    }
 }
