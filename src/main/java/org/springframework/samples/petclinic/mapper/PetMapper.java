@@ -4,14 +4,17 @@ import org.jspecify.annotations.NonNull;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.data.domain.Page;
+import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
+import org.springframework.samples.petclinic.rest.dto.OwnerDto;
 import org.springframework.samples.petclinic.rest.dto.PetDto;
 import org.springframework.samples.petclinic.rest.dto.PetFieldsDto;
 import org.springframework.samples.petclinic.rest.dto.PetPageDto;
 import org.springframework.samples.petclinic.rest.dto.PetTypeDto;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Map Pet & PetDto using mapstruct
@@ -25,6 +28,8 @@ public interface PetMapper {
     Collection<PetDto> toPetsDto(Collection<Pet> pets);
 
     Collection<Pet> toPets(Collection<PetDto> pets);
+
+    Collection<PetDto> toPetsCollection(Collection<PetDto> petsDtos);
 
     @Mapping(source = "ownerId", target = "owner.id")
     Pet toPet(PetDto petDto);

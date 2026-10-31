@@ -664,4 +664,45 @@ class OwnerRestControllerV1Tests {
             .andExpect(jsonPath("$.schemaValidationErrors[0].field").value("birthDate"));
     }
 
+    @Test
+    @WithMockUser(roles = "OWNER_ADMIN")
+    void testGetPetsByOwnerIdReturnOk() throws Exception {
+        int ownerId = owners.get(0).getId();
+        OwnerDto ownerDto = owners.get(0);
+        given(this.clinicService.findOwnerById(ownerId)).willReturn(ownerMapper.toOwner(ownerDto));
+
+        this.mockMvc.perform(get("/api/owners/" + ownerId + "/pets")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[0].id").value(1))
+                .andExpect(jsonPath("$.[0].name").value("Rosy"));
+    }
+
+    @Test
+    @WithMockUser(roles = "OWNER_ADMIN")
+    void testGetPetsByOwnerIdWithoutPetsReturnOkAndEmptyList() throws Exception {
+        int ownerId = owners.get(1).getId();
+        OwnerDto ownerDto = owners.get(1);
+        given(this.clinicService.findOwnerById(ownerId)).willReturn(ownerMapper.toOwner(ownerDto));
+
+        this.mockMvc.perform(get("/api/owners/" + ownerId + "/pets")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
+
+    }
+
+    @Test
+    @WithMockUser(roles = "OWNER_ADMIN")
+    void testGetPetsByOwnerIdNotExitsThenReturnNotFound() throws Exception {
+        int ownerId = owners.get(0).getId();
+
+        this.mockMvc.perform(get("/api/owners/" + ownerId + "/pets")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isNotFound());
+    }
+
 }
