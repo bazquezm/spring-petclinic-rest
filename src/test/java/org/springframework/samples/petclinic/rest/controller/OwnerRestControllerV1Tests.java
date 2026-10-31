@@ -187,7 +187,7 @@ class OwnerRestControllerV1Tests {
 
     @Test
     @WithMockUser(roles = "OWNER_ADMIN")
-    void testGetOwnersListNotFound() throws Exception {
+    void testGetOwnersListReturnOK() throws Exception {
         owners.clear();
         given(this.clinicService.findOwnerByLastName("0")).willReturn(ownerMapper.toOwners(owners));
         this.mockMvc.perform(get("/api/owners?lastName=0")
@@ -213,12 +213,13 @@ class OwnerRestControllerV1Tests {
 
     @Test
     @WithMockUser(roles = "OWNER_ADMIN")
-    void testGetAllOwnersNotFound() throws Exception {
+    void testGetAllOwnersReturnsOK() throws Exception {
         owners.clear();
         given(this.clinicService.findAllOwners()).willReturn(ownerMapper.toOwners(owners));
         this.mockMvc.perform(get("/api/owners")
                 .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk());
+            .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
     }
 
     @Test

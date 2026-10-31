@@ -81,9 +81,7 @@ public class OwnerRestControllerV1 implements OwnersApi {
         } else {
             owners = this.clinicService.findAllOwners();
         }
-        if (owners.isEmpty()) {
-            return new ResponseEntity<>(Collections.emptyList(),HttpStatus.OK);
-        }
+
         return new ResponseEntity<>(ownerMapper.toOwnerDtoCollection(owners), HttpStatus.OK);
     }
 
